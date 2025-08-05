@@ -1,0 +1,4 @@
+body .ant-layout,
+.ant-layout .ant-layout-footer {
+  background: none;
+}

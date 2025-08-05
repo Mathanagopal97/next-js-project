@@ -1,3 +1,6 @@
+import { AntdRegistry } from "@ant-design/nextjs-registry";
+// import { Layout } from "antd";
+import Layout, { Content, Footer } from "antd/es/layout/layout";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -22,10 +25,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // const { Content, Footer } = Layout;
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        <Layout>
+          <AntdRegistry>
+            <Content style={{ padding: "0 48px", margin: "40px 0" }}>
+              {children}
+            </Content>
+            <Footer style={{ textAlign: "center" }}>
+              Ant Design ©{new Date().getFullYear()} Created by Ant UED
+            </Footer>
+          </AntdRegistry>
+        </Layout>
       </body>
     </html>
   );
