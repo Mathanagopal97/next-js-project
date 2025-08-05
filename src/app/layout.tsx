@@ -35,7 +35,7 @@ export default function RootLayout({
               {children}
             </Content>
             <Footer style={{ textAlign: "center" }}>
-              Ant Design ©{new Date().getFullYear()} Created by Ant UED
+              Custom Project ©{new Date().getFullYear()} Created by Mathan
             </Footer>
           </AntdRegistry>
         </Layout>
