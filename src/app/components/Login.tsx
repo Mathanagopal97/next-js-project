@@ -1,5 +1,6 @@
 "use client";
 import FieldInfo from "@/components/FieldInfo";
+import { authClient } from "@/lib/auth-client";
 import { useForm } from "@tanstack/react-form";
 import { Button, Flex, Input, Typography } from "antd";
 import { useRouter } from "next/navigation";
@@ -17,14 +18,26 @@ export default function Login() {
       console.log(value);
       const { email, password } = value;
       try {
-        const response = await fetch("/api/login", {
-          method: "POST",
-          body: JSON.stringify({ email, password }),
-          headers: { "Content-Type": "application/json" },
-        });
-        if (response.ok) {
-          router.push("/dashboard");
-        }
+        const { data, error } = await authClient.signIn.email(
+          {
+            email,
+            password,
+            callbackURL: "/dashboard",
+            rememberMe: false,
+          },
+          {
+            onRequest: (ctx) => {
+              //show loading
+            },
+            onSuccess: (ctx) => {
+              //redirect to the dashboard or sign in page
+            },
+            onError: (ctx) => {
+              // display the error message
+              alert(ctx.error.message);
+            },
+          }
+        );
       } catch (err: any) {
         console.log(err);
       }

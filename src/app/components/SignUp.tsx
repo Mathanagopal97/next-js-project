@@ -1,7 +1,8 @@
 "use client";
 import FieldInfo from "@/components/FieldInfo";
+import { authClient } from "@/lib/auth-client";
 import { useForm } from "@tanstack/react-form";
-import { Alert, Button, Flex, Input, Typography } from "antd";
+import { Alert, Button, Flex, Input, Typography, notification } from "antd";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -17,6 +18,7 @@ export default function SignUp() {
   });
   const { Title } = Typography;
   const router = useRouter();
+  const [api, contextHolder] = notification.useNotification();
   const form = useForm({
     defaultValues: {
       name: "",
@@ -28,27 +30,41 @@ export default function SignUp() {
       console.log(value);
       const { email, password, name } = value;
       try {
-        const response = await fetch("/api/sign-up", {
-          method: "POST",
-          body: JSON.stringify({ email, password, name }),
-          headers: { "Content-Type": "application/json" },
-        });
-
-        if (response.ok) {
-          setUserMessage({
-            message: "Signup is successful. Please login now",
-            type: "success",
-          });
-          // router.push("/dashboard"); // or wherever you want to redirect
-        } else {
-          alert("Signup failed");
-        }
+        const { data, error } = await authClient.signUp.email(
+          {
+            email,
+            password,
+            name,
+          },
+          {
+            onRequest: (ctx) => {
+              //show loading
+            },
+            onSuccess: (ctx) => {
+              //redirect to the dashboard or sign in page
+            },
+            onError: (ctx) => {
+              // display the error message
+              openNotification(true);
+            },
+          }
+        );
         // await signUp.email({ email, password, name });
       } catch (err: any) {
         console.log(err);
       }
     },
   });
+  const openNotification = (pauseOnHover: boolean) => () => {
+    api.open({
+      message: "Notification Title",
+      description:
+        "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
+      showProgress: true,
+      pauseOnHover,
+    });
+  };
+
   return (
     <>
       <Title level={3}>Sign Up</Title>
@@ -169,6 +185,7 @@ export default function SignUp() {
           )}
         />
       </form>
+      {contextHolder}
     </>
   );
 }
