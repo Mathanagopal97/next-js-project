@@ -1,60 +1,39 @@
 "use client";
 import FieldInfo from "@/components/FieldInfo";
 import { useForm } from "@tanstack/react-form";
-import { Alert, Button, Flex, Input, Typography } from "antd";
+import { Button, Flex, Input, Typography } from "antd";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
-interface UserMessage {
-  message?: string;
-  type: "success" | "info" | "warning" | "error" | undefined;
-}
-
-export default function SignUp() {
-  const [userMessage, setUserMessage] = useState<UserMessage>({
-    message: undefined,
-    type: undefined,
-  });
+export default function Login() {
   const { Title } = Typography;
   const router = useRouter();
   const form = useForm({
     defaultValues: {
-      name: "",
       email: "",
       password: "",
     },
     onSubmit: async ({ value }) => {
       // Do something with form data
       console.log(value);
-      const { email, password, name } = value;
+      const { email, password } = value;
       try {
-        const response = await fetch("/api/sign-up", {
+        const response = await fetch("/api/login", {
           method: "POST",
-          body: JSON.stringify({ email, password, name }),
+          body: JSON.stringify({ email, password }),
           headers: { "Content-Type": "application/json" },
         });
-
         if (response.ok) {
-          setUserMessage({
-            message: "Signup is successful. Please login now",
-            type: "success",
-          });
-          // router.push("/dashboard"); // or wherever you want to redirect
-        } else {
-          alert("Signup failed");
+          router.push("/dashboard");
         }
-        // await signUp.email({ email, password, name });
       } catch (err: any) {
         console.log(err);
       }
     },
   });
+
   return (
     <>
-      <Title level={3}>Sign Up</Title>
-      {userMessage.message && userMessage.type && (
-        <Alert message={userMessage.message} type={userMessage.type} />
-      )}
+      <Title level={3}>Login</Title>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -62,36 +41,7 @@ export default function SignUp() {
           form.handleSubmit();
         }}
       >
-        <Flex gap={10} vertical style={{ marginBottom: "10px" }}>
-          <form.Field
-            name="name"
-            validators={{
-              onChange: ({ value }) =>
-                !value
-                  ? "A name is required"
-                  : value.length < 3
-                  ? "Name must be at least 3 characters"
-                  : undefined,
-            }}
-            children={(field) => {
-              // Avoid hasty abstractions. Render props are great!
-              return (
-                <>
-                  <label htmlFor={field.name}>First Name:</label>
-                  <Input
-                    id={field.name}
-                    name={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                  <FieldInfo field={field} />
-                </>
-              );
-            }}
-          />
-        </Flex>
-        <Flex gap={10} vertical style={{ marginBottom: "10px" }}>
+        <Flex gap={10} vertical>
           <form.Field
             name="email"
             validators={{
@@ -105,7 +55,7 @@ export default function SignUp() {
                   : "Please enter a valid email",
               onChangeAsyncDebounceMs: 500,
               onChangeAsync: async ({ value }) => {
-                /*TODO: Check if email exists*/
+                await new Promise((resolve) => setTimeout(resolve, 1000));
                 return value.includes("error") && 'No "error" allowed in email';
               },
             }}
@@ -120,6 +70,13 @@ export default function SignUp() {
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                   />
+                  {/* <input
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                /> */}
                   <FieldInfo field={field} />
                 </>
               );

@@ -1,5 +1,5 @@
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-// import { Layout } from "antd";
+import { ConfigProvider } from "antd";
 import Layout, { Content, Footer } from "antd/es/layout/layout";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -32,7 +32,9 @@ export default function RootLayout({
         <Layout>
           <AntdRegistry>
             <Content style={{ padding: "0 48px", margin: "40px 0" }}>
-              {children}
+              <ConfigProvider wave={{ disabled: true }}>
+                {children}
+              </ConfigProvider>
             </Content>
             <Footer style={{ textAlign: "center" }}>
               Custom Project ©{new Date().getFullYear()} Created by Mathan

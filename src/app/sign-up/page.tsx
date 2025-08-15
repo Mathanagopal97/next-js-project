@@ -1,22 +1,15 @@
-"use client";
-
-// import bcrypt from "bcrypt";
-import type { AnyFieldApi } from "@tanstack/react-form";
+import Login from "@/components/Login";
+import SignUp from "@/components/SignUp";
+import { auth } from "@/lib/auth";
 import { Flex, Splitter } from "antd";
-import SignUp from "../components/SignUp";
+import { headers } from "next/headers";
 
-function FieldInfo({ field }: { field: AnyFieldApi }) {
-  return (
-    <>
-      {field.state.meta.isTouched && !field.state.meta.isValid ? (
-        <em>{field.state.meta.errors.join(", ")}</em>
-      ) : null}
-      {field.state.meta.isValidating ? "Validating..." : null}
-    </>
-  );
-}
-
-export default function SignUpPage() {
+export default async function SignUpPage() {
+  // server side code.
+  const session = await auth.api.getSession({
+    headers: await headers(), // you need to pass the headers object.
+  });
+  console.log(session);
   return (
     <Flex vertical gap="middle">
       <Splitter>
@@ -32,7 +25,7 @@ export default function SignUpPage() {
           style={{ margin: "20px" }}
           resizable={false}
         >
-          Login
+          <Login />
         </Splitter.Panel>
       </Splitter>
     </Flex>
