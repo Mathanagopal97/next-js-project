@@ -3,6 +3,7 @@ import { ConfigProvider } from "antd";
 import Layout, { Content, Footer } from "antd/es/layout/layout";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import CustomHeader from "./components/CustomHeader";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,22 +26,22 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const { Content, Footer } = Layout;
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Layout>
-          <AntdRegistry>
-            <Content style={{ padding: "0 48px", margin: "40px 0" }}>
-              <ConfigProvider wave={{ disabled: true }}>
+        <AntdRegistry>
+          <ConfigProvider wave={{ disabled: true }}>
+            <Layout>
+              <CustomHeader />
+              <Content style={{ padding: "0 48px", margin: "40px 0" }}>
                 {children}
-              </ConfigProvider>
-            </Content>
-            <Footer style={{ textAlign: "center" }}>
-              Custom Project ©{new Date().getFullYear()} Created by Mathan
-            </Footer>
-          </AntdRegistry>
-        </Layout>
+              </Content>
+              <Footer style={{ textAlign: "center" }}>
+                Custom Project ©{new Date().getFullYear()} Created by Mathan
+              </Footer>
+            </Layout>
+          </ConfigProvider>
+        </AntdRegistry>
       </body>
     </html>
   );

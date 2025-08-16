@@ -44,8 +44,8 @@ export default function SignUp() {
               //redirect to the dashboard or sign in page
             },
             onError: (ctx) => {
+              console.log(ctx.error.message);
               // display the error message
-              openNotification(true);
             },
           }
         );
@@ -55,15 +55,6 @@ export default function SignUp() {
       }
     },
   });
-  const openNotification = (pauseOnHover: boolean) => () => {
-    api.open({
-      message: "Notification Title",
-      description:
-        "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
-      showProgress: true,
-      pauseOnHover,
-    });
-  };
 
   return (
     <>
