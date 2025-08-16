@@ -46,6 +46,10 @@ export default function SignUp() {
             onError: (ctx) => {
               console.log(ctx.error.message);
               // display the error message
+              api.error({
+                message: "Error during Sign up",
+                description: ctx.error.message,
+              });
             },
           }
         );
